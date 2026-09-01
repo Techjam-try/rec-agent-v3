@@ -1,20 +1,46 @@
-# RecResearcher V3
+# `research_agent_v3`
 
-V3 keeps the V2 project unchanged and adds CUDA-aware DeepFM, DCN, DIN, multi-behavior auxiliary learning, deterministic feature caching, bounded autonomous recipes, auditable checkpoints, and label-free submission export.
+This directory contains the GPU-enabled V3 research agent, model implementations, experiment runner, checkpoint handling, and submission tools.
 
-## Colab GPU
+For project setup, KuaiRand-Pure download instructions, Colab GPU steps, verified results, and troubleshooting, see the [repository README](../README.md).
 
-Open `colab/RecResearcher_V3_GPU.ipynb`, choose **Runtime → Change runtime type → T4 GPU**, and run the cells in order. The notebook downloads KuaiRand-Pure, checks its MD5, runs the test suite, and launches:
+## Module map
+
+| File | Responsibility |
+|---|---|
+| `agent.py` | Runs the bounded autonomous experiment loop and selects the best validation checkpoint. |
+| `data.py` | Loads KuaiRand-Pure and builds leakage-safe train/validation/test features. |
+| `cache.py` | Persists deterministic encoded features for reuse between experiments. |
+| `models.py` | Implements the CUDA-aware DeepFM, DCN, DIN, and auxiliary-task models. |
+| `operations.py` | Defines the allowed model and training operations available to the agent. |
+| `recipe_compiler.py` | Validates and compiles bounded experiment recipes. |
+| `runner.py` | Trains candidates, evaluates validation metrics, and records resource usage. |
+| `checkpoints.py` | Saves and restores model configurations, weights, and recovery state. |
+| `make_submission.py` | Generates label-free test predictions from one checkpoint. |
+| `final_ensemble.py` | Reproduces the validated multi-seed ensemble and final submission. |
+
+All commands below must be run from the repository root so the unchanged official `evaluate.py` and `submit.py` are available.
+
+## Autonomous experiment
 
 ```bash
 python -m research_agent_v3.agent \
   --data-dir ./KuaiRand-Pure/data \
   --output-dir ./v3_runs/colab_run \
+  --cache-dir ./v3_runs/cache \
   --device cuda \
   --epochs 12
 ```
 
-Generate predictions without reading test labels:
+Arguments:
+
+- `--data-dir`: required KuaiRand-Pure `data/` directory.
+- `--output-dir`: required directory for logs and checkpoints.
+- `--cache-dir`: encoded-feature cache; default is `.cache/v3`.
+- `--device`: `cuda`, `cpu`, or `auto`; default is `auto`.
+- `--epochs`: candidate training epochs; default is `12`.
+
+## Single-checkpoint submission
 
 ```bash
 python -m research_agent_v3.make_submission \
@@ -24,11 +50,13 @@ python -m research_agent_v3.make_submission \
   --device cuda
 ```
 
-The full run must be launched from the Starter Kit root so the unchanged official `evaluate.py` is importable. Report only persisted validation metrics; do not describe them as hidden-test results.
+This command performs test inference without reading test labels. Validate the generated file with the official checker:
 
-## Final verified ensemble
+```bash
+python submit.py --check --split test ./submission_v3.csv
+```
 
-After the DIN run completes, freeze the reproducible multi-seed ensemble and generate the final submission:
+## Final ensemble
 
 ```bash
 python -m research_agent_v3.final_ensemble \
@@ -38,8 +66,15 @@ python -m research_agent_v3.final_ensemble \
   --cache-dir ./v3_runs/cache \
   --device cuda \
   --epochs 18
-
-python submit.py --check --split test ./v3_runs/final/submission_v3.csv
 ```
 
-The executed Tesla T4 run produced `GAUC=0.672020`, `nDCG@5=0.538426`, and `primary=0.605223`. This is `+0.000171` over the V2 validation result (`0.605052`) and `+0.003623` over the official FM validation baseline (`0.6016`). The generated submission contained 170,588 rows and passed the official alignment checker.
+The output directory contains the ensemble manifest, member checkpoints, validation records, and `submission_v3.csv`.
+
+## Development constraints
+
+- Use the fixed date-based training and validation split.
+- Select models and ensemble weights using validation data only.
+- Never inspect or use test labels during training, tuning, or selection.
+- Keep experiment recipes within the operations allowed by `recipe_compiler.py`.
+- Do not commit datasets, `.pt` checkpoints, caches, secrets, or API tokens.
+
