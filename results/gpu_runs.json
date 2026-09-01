@@ -1,0 +1,92 @@
+[
+  {
+    "iteration": 1,
+    "name": "deepfm_v2_control",
+    "family": "deepfm",
+    "hypothesis": "验证 deepfm_v2_control 在官方指标上的收益",
+    "status": "completed",
+    "metrics": {
+      "GAUC": 0.6529229879379272,
+      "nDCG@5": 0.5301664471626282,
+      "primary": 0.5915447473526001,
+      "users": 22377.0,
+      "rows": 124909.0
+    },
+    "best_epoch": 12,
+    "device": "Tesla T4",
+    "elapsed_seconds": 15.505376815795898,
+    "recovery_events": []
+  },
+  {
+    "iteration": 2,
+    "name": "dcn_v2_control",
+    "family": "dcn",
+    "hypothesis": "验证 dcn_v2_control 在官方指标上的收益",
+    "status": "completed",
+    "metrics": {
+      "GAUC": 0.652161717414856,
+      "nDCG@5": 0.5293166637420654,
+      "primary": 0.5907391905784607,
+      "users": 22377.0,
+      "rows": 124909.0
+    },
+    "best_epoch": 12,
+    "device": "Tesla T4",
+    "elapsed_seconds": 15.087029218673706,
+    "recovery_events": []
+  },
+  {
+    "iteration": 3,
+    "name": "deepfm_gpu",
+    "family": "deepfm",
+    "hypothesis": "验证 deepfm_gpu 在官方指标上的收益",
+    "status": "completed",
+    "metrics": {
+      "GAUC": 0.6580561995506287,
+      "nDCG@5": 0.5320364832878113,
+      "primary": 0.59504634141922,
+      "users": 22377.0,
+      "rows": 124909.0
+    },
+    "best_epoch": 12,
+    "device": "Tesla T4",
+    "elapsed_seconds": 16.316425323486328,
+    "recovery_events": []
+  },
+  {
+    "iteration": 4,
+    "name": "din_primary",
+    "family": "din",
+    "hypothesis": "验证 din_primary 在官方指标上的收益",
+    "status": "completed",
+    "metrics": {
+      "GAUC": 0.658417284488678,
+      "nDCG@5": 0.5318737030029297,
+      "primary": 0.5951454639434814,
+      "users": 22377.0,
+      "rows": 124909.0
+    },
+    "best_epoch": 10,
+    "device": "Tesla T4",
+    "elapsed_seconds": 22.237642526626587,
+    "recovery_events": []
+  },
+  {
+    "iteration": 5,
+    "name": "din_multitask",
+    "family": "din",
+    "hypothesis": "验证 din_multitask 在官方指标上的收益",
+    "status": "completed",
+    "metrics": {
+      "GAUC": 0.6628284454345703,
+      "nDCG@5": 0.5344527363777161,
+      "primary": 0.5986405611038208,
+      "users": 22377.0,
+      "rows": 124909.0
+    },
+    "best_epoch": 12,
+    "device": "Tesla T4",
+    "elapsed_seconds": 23.522847890853882,
+    "recovery_events": []
+  }
+]

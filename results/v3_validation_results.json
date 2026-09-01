@@ -1,0 +1,19 @@
+{
+  "dataset": "KuaiRand-Pure",
+  "split": "validation 20220422-20220428",
+  "label": "long_view",
+  "metrics": {
+    "GAUC": 0.6720196604728699,
+    "nDCG@5": 0.5384255647659302,
+    "primary": 0.6052225828170776
+  },
+  "official_fm_primary": 0.6016,
+  "v2_primary": 0.605052,
+  "delta_vs_official_fm": 0.0036225828170776,
+  "delta_vs_v2": 0.0001705828170776,
+  "gpu": "Tesla T4",
+  "members": ["deepfm_0", "dcn_0", "deepfm_1", "dcn_1", "deepfm_2", "dcn_2", "din"],
+  "weights": [0.32833333333333303, 0.1483333333333333, 0.06833333333333345, 0.10833333333333338, 0.16833333333333333, 0.1683333333333334, 0.010000000000000064],
+  "submission_rows": 170588,
+  "official_submission_check": "passed"
+}

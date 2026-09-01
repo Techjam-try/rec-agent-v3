@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.cache/
+v3_runs/
+KuaiRand-Pure/
+*.tar.gz
